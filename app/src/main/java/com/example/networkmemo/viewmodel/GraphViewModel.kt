@@ -39,7 +39,7 @@ class GraphViewModel(
     private var db: AppDatabase = AppDatabase.getInstance(application)
     private val nodeRepository = NodeRepository(NodeLocalSource(db.nodeDao()))
     private val edgeRepository = EdgeRepository(EdgeLocalSource(db.edgeDao()))
-    private val graphRepository = GraphRepository(nodeRepository, edgeRepository)
+    private val graphRepository = GraphRepository(db, nodeRepository, edgeRepository)
     private val folderRepository = FolderRepository(FolderLocalSource(db.folderDao()))
     private val historyRepository = HistoryRepository(HistoryLocalSource(db.historyDao()))
 
@@ -48,16 +48,12 @@ class GraphViewModel(
     private var algorithm: Algorithm = ForcedGraphAlgorithm()
     private var able = true
 
-    private val nodes = ArrayList<Node>()
-    private val edges = ArrayList<Edge>()
-    private val nodeId2Index = HashMap<Long, Int>()
-
     private val _nodeStates = mutableListOf<MutableState<Node>>()
     private val _edgeStates = mutableListOf<MutableState<Edge>>()
-
     val nodeStates: List<State<Node>> = _nodeStates
     val edgeStates: List<State<Edge>> = _edgeStates
 
+    private val a = mutableStateListOf("")
 
     fun setGraph() {
 
@@ -70,9 +66,11 @@ class GraphViewModel(
                 mutex.withLock {
                     while(able) {
                         val opTime = measureTimeMillis {
-                            algorithm(nodes, edges, nodeId2Index)
-                            nodes.forEachIndexed { index, node ->
-                                _nodeStates[index].value = node
+                            with(graphRepository) {
+                                algorithm(nodes, edges, nodeId2Index)
+                                nodes.forEachIndexed { index, node ->
+                                    _nodeStates[index].value = node
+                                }
                             }
                         }
                         if(opTime < OP_TIME_THRESHOLD) delay(OP_TIME_THRESHOLD - opTime)

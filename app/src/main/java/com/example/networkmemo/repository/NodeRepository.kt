@@ -11,6 +11,9 @@ class NodeRepository(
     private val nodeSource: NodeLocalSource
 ) {
     val nodes = nodeSource.getAllNodes()
+    suspend fun getAllNodesByFolder(folderId: Long) = nodeSource.getNodesByFolder(folderId)
+    suspend fun getNodeById(id: Long) = nodeSource.getNodeById(id)
+    fun deleteNode(node: Node) = nodeSource.deleteNode(node)
     suspend fun insertNodes(nodes: List<Node>) = nodeSource.insertNodes(nodes)
     suspend fun insertNode(
         x: Double,

@@ -59,7 +59,10 @@ class MainActivity : ComponentActivity() {
 
         thread(start = true) {
             viewModel = GraphViewModel(application)
+
         }
+
+
 
         setContent {
             NetWorkMemoTheme {

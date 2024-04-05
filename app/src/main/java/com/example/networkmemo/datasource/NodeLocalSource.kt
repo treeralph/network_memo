@@ -6,6 +6,8 @@ import com.example.networkmemo.data.entities.Node
 class NodeLocalSource(private val nodeDao: NodeDao) {
     fun getAllNodes() = nodeDao.getAllNodes()
     fun getNodesByFolder(folderId: Long) = nodeDao.getNodesByFolder(folderId)
+    suspend fun getNodeById(id: Long) = nodeDao.getNodeById(id)
+    fun deleteNode(node: Node) = nodeDao.deleteNode(node)
     suspend fun insertNodes(nodes: List<Node>) = nodeDao.insertNodes(nodes)
     suspend fun insertNode(
         x: Double,

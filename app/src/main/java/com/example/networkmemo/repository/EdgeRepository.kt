@@ -11,6 +11,11 @@ import com.example.networkmemo.datasource.NodeLocalSource
 class EdgeRepository(private val edgeSource: EdgeLocalSource) {
 
     val edges: List<Edge> = edgeSource.getAllEdges()
+    suspend fun getAllEdgesByFolder(folderId: Long) = edgeSource.getAllEdgesByFolder(folderId)
+    suspend fun getEdgeById(id: Long) = edgeSource.getEdgeById(id)
+    suspend fun isEdge(node1: Long, node2: Long) = edgeSource.isEdge(node1, node2)
+    fun deleteEdge(edge: Edge) = edgeSource.deleteEdge(edge)
+    fun deleteEdgesByNodeId(nodeId: Long) = edgeSource.deleteEdgesByNodeId(nodeId)
     suspend fun insertEdge(
         node1: Long,
         node2: Long,

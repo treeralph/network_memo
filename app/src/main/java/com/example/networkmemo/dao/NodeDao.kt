@@ -28,12 +28,14 @@ interface NodeDao {
     suspend fun updateNodes(nodes: List<Node>)
     @Delete
     suspend fun deleteNodes(nodes: List<Node>)
+    @Delete
+    fun deleteNode(node: Node)
     @Query("SELECT * FROM Node")
-    fun getAllNodes(): LiveData<List<Node>>
+    fun getAllNodes(): List<Node>
     @Query("SELECT * FROM Node ORDER BY createdTime DESC LIMIT 1")
     suspend fun getLatestNode(): Node
     @Query("SELECT * FROM Node WHERE id = :id")
-    fun getNodeById(id: Long): Node
+    suspend fun getNodeById(id: Long): Node
     @Query("SELECT * FROM Node WHERE folder = :folder")
-    fun getNodesByFolder(folder: Long): LiveData<List<Node>>
+    fun getNodesByFolder(folder: Long): List<Node>
 }

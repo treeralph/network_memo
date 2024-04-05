@@ -18,14 +18,16 @@ interface EdgeDao {
     fun updateEdges(edges: List<Edge>)
     @Delete
     fun deleteEdges(edges: List<Edge>)
+    @Delete
+    fun deleteEdge(edge: Edge)
     @Query("SELECT * FROM Edge")
     fun getAllEdges(): List<Edge>
     @Query("SELECT * FROM Edge WHERE id = :id")
-    fun getEdgeById(id: Long): Edge
+    suspend fun getEdgeById(id: Long): Edge
     @Query("DELETE FROM Edge WHERE node1=:id OR node2=:id")
     fun deleteEdgesByNodeId(id: Long)
     @Query("SELECT * FROM Edge WHERE folder = :folder")
-    fun getEdgesByFolder(folder: Long): LiveData<List<Edge>>
+    fun getEdgesByFolder(folder: Long): List<Edge>
     @Query("SELECT * FROM Edge WHERE (node1 = :node1 AND node2 = :node2) OR (node1 = :node2 AND node2 = :node1)")
-    fun isEdge(node1: Long, node2: Long): List<Edge>
+    suspend fun isEdge(node1: Long, node2: Long): List<Edge>
 }
